@@ -62,19 +62,35 @@ namespace LibraryService.WebAPI
                 });
 
             // 4.Configurar Autorizacion
-         services.AddAuthorization();
+            /* services.AddAuthorization();
+
+                services.AddCors(options =>
+                {
+                    options.AddPolicy("DevCors", policy =>
+
+                        policy.WithOrigins("http://localhost:5173")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowCredentials()
+                    );
+                });*/
+            services.AddAuthorization();
 
             services.AddCors(options =>
             {
                 options.AddPolicy("DevCors", policy =>
 
-                    policy.WithOrigins("http://localhost:5173")
+                    policy.WithOrigins(
+                        "http://localhost:5173",
+                        "https://soft-dolphin-d14927.netlify.app"
+                        )
                             .AllowAnyMethod()
                             .AllowAnyHeader()
                             .AllowCredentials()
                 );
             });
-           
+
+
 
 
             // Add support for Dependency Injection for internal services (BooksService and LibrariesService)
@@ -98,7 +114,7 @@ namespace LibraryService.WebAPI
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        /*public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -113,7 +129,21 @@ namespace LibraryService.WebAPI
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryService API v1");
                 });
+            }*/
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
             }
+
+            // Enable Swagger in all environments (dev and production)
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "LibraryService API v1");
+            });
 
 
 
