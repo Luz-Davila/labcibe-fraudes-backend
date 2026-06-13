@@ -98,7 +98,9 @@ namespace LibraryService.WebAPI
             services.AddTransient<IBooksService,  BooksService>();
             services.AddTransient<IFraudService, FraudService>();
 
-            services.AddDbContext<LibraryContext>(options => options.UseInMemoryDatabase("librarydb"));
+            // services.AddDbContext<LibraryContext>(options => options.UseInMemoryDatabase("librarydb"));
+            services.AddDbContext<LibraryContext>(options =>
+     options.UseNpgsql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
 
             // Add Swagger generation
